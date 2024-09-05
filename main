@@ -1,0 +1,103 @@
+from fpdf import FPDF
+import random
+import time
+
+All_Details = []
+
+def Details():
+    print("\nWrite Your Personal Information")
+    name = input("Full-Name : ")
+    email = input("Valid Email : ")
+    phone = input("Mobile Number : ")
+
+    print("\nWrite Your Educational Qualifications")
+    school = input("School : ")
+    degree = input("Degree : ")
+    year = float(input("Year Of Education : "))
+
+    print("\nWrite Your Work Experience")
+    company = input("Company Name : ")
+    position = input("Position : ")
+    years = input("Years Worked : ")
+    skills = input("Skills (separate by commas): ").split(', ')
+
+    details = {
+        "Name": name,
+        "Email": email,
+        "Phone": phone,
+        "School": school,
+        "Degree": degree,
+        "Company": company,
+        "Position": position,
+        "Year": year,  # Corrected key name
+        "Skills": ', '.join(skills)  # Joining the list into a string
+    }
+
+    All_Details.append(details)
+    print("All the details have been saved successfully ✓")
+Details()
+
+def watch_time():
+    Time = time.strftime("%H:%M:%S")
+    return f"{Time}"
+
+def details_to_pdf():
+    # Using the first set of details in All_Details
+    details = All_Details[0]
+    
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+
+    # Title Section
+    pdf.set_font("Arial", "B", size=24)  # Bold, large font for title
+    pdf.cell(200, 15, txt="Automatic Resume Builder", border=0, ln=True, align="C")
+    pdf.ln(10)  # Line break for spacing
+
+    # Personal Information Section
+    pdf.set_font("Arial", "B", size=18)
+    pdf.cell(200, 10, txt="Personal Information", ln=True, align="L")
+    
+    pdf.set_font("Arial", size=14)  # Regular font for details
+    pdf.cell(200, 10, txt=f"Name: {details['Name']}", ln=True)
+    pdf.cell(200, 10, txt=f"Email: {details['Email']}", ln=True)
+    pdf.cell(200, 10, txt=f"Phone: {details['Phone']}", ln=True)
+    pdf.ln(5)  # Add some space between sections
+
+    # Education Section
+    pdf.set_font("Arial", "B", size=18)
+    pdf.cell(200, 10, txt="Educational Qualifications", ln=True, align="L")
+    
+    pdf.set_font("Arial", size=14)
+    pdf.cell(200, 10, txt=f"School: {details['School']}", ln=True)
+    pdf.cell(200, 10, txt=f"Degree: {details['Degree']}", ln=True)
+    pdf.ln(5)
+
+    # Work Experience Section
+    pdf.set_font("Arial", "B", size=18)
+    pdf.cell(200, 10, txt="Work Experience", ln=True, align="L")
+    
+    pdf.set_font("Arial", size=14)
+    pdf.cell(200, 10, txt=f"Company: {details['Company']}", ln=True)
+    pdf.cell(200, 10, txt=f"Position: {details['Position']}", ln=True)
+    pdf.cell(200, 10, txt=f"Work Year: {details['Year']}", ln=True)
+    pdf.ln(5)
+
+    # Skills Section
+    pdf.set_font("Arial", "B", size=18)
+    pdf.cell(200, 10, txt="Skills", ln=True, align="L")
+    
+    pdf.set_font("Arial", size=14)
+    pdf.multi_cell(0, 10, txt=f"{details['Skills']}")
+    pdf.ln(5)
+    
+    # Generating The Random Number For Saving The Resume
+    number = random.randrange(1, 1000)
+    name = input("Write PDF Name: ")
+    pdf.output(f"{name}_{number}.pdf")
+    
+    # Print time after saving the file
+    print(f"You Have Created The PDF. {watch_time()}")
+    print("Resume PDF generated successfully!")
+
+details_to_pdf()
